@@ -2,17 +2,6 @@
 
 @section('title', 'Login')
 
-@section('header')
-    <header class="p-4 border-b">
-        <div class="max-w-2xl mx-auto flex items-center justify-between">
-            <h1 class="text-xl font-semibold">My App</h1>
-            <nav class="text-sm">
-                <a href="/" class="underline">Home</a>
-            </nav>
-        </div>
-    </header>
-@endsection
-
 @section('content')
     <main class="max-w-md mx-auto p-6">
         <h2 class="text-lg font-medium mb-4">Sign in to your account</h2>
@@ -45,22 +34,11 @@
                     <input type="checkbox" name="remember" />
                     <span>Remember me</span>
                 </label>
-                <a href="#" class="text-sm underline">Forgot password?</a>
             </div>
 
             <button type="submit" class="w-full p-2 rounded bg-black text-white">Sign in</button>
         </form>
     </main>
-@endsection
-
-@section('footer')
-    <footer class="p-4 border-t mt-8">
-        <div class="max-w-2xl mx-auto text-sm text-gray-600">© {{ date('Y') }} My App</div>
-    </footer>
-@endsection
-
-@section('scripts')
-    
 @endsection
 
 
