@@ -110,6 +110,10 @@
 						const response = await axios.post('{{ route('project.store') }}', data, { withCredentials: true })
 						this.isloading = false
 						toast(response.data.message)
+
+						const id = response.data.project.id;
+						const updateUrl = `/project/${id}`;
+						window.location.replace(updateUrl);
 					} catch (error) {
 						console.log(error)
                         if (error.response) {

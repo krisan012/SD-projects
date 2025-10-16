@@ -23,7 +23,7 @@
 					</div>
 					<div class="flex items-center space-x-4">
 						@auth
-							<form action="{{ route('logout') }}" method="POST">
+							<form x-data="logout" @submit.prevent="trigger">
 								@csrf
 								<button type="submit"
 									class="font-semibold text-sm text-gray-700 hover:text-blue-600">logout</a>
@@ -64,6 +64,14 @@
 					this.timeout = setTimeout(() => this.show = false, 3000);
 				}
 			});
+
+			Alpine.data('logout', () => ({
+				async trigger() {
+					await axios.post('{{ route('logout') }}')
+
+					window.location.reload();
+				}
+			}));
 		});
 		window.toast = (message, type) => Alpine.store('toast').trigger(message, type);
 	</script>
