@@ -58,10 +58,12 @@
                 message: '',
                 async login() {
                     try {
+                        await axios.get('/sanctum/csrf-cookie', { withCredentials: true });
+
                         const response = await axios.post('/login', {
                             email: this.email,
                             password: this.password,
-                        });
+                        }, { withCredentials: true });
 
                         this.message = 'Login successful! Redirecting...';
                         window.location.href = '/'
