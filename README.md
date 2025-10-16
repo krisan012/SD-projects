@@ -206,33 +206,6 @@ tests/
 - Add comprehensive tests for new features
 - Document API endpoints
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Permission denied errors**
-   ```bash
-   sudo chown -R $USER:$USER storage bootstrap/cache
-   chmod -R 775 storage bootstrap/cache
-   ```
-
-2. **Database connection issues**
-   - Check your `.env` database configuration
-   - Ensure database server is running
-   - Verify database exists
-
-3. **Authentication issues**
-   - Clear application cache: `php artisan cache:clear`
-   - Clear config cache: `php artisan config:clear`
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Commit changes: `git commit -am 'Add new feature'`
-4. Push to branch: `git push origin feature/new-feature`
-5. Submit a pull request
-
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
