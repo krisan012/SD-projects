@@ -16,4 +16,9 @@ class ProjectPolicy
         return $user->hasRole('admin') || $project->user_id === $user->id;
     }
 
+
+    public function update(User $user, Project $project): bool
+    {
+        return $user->hasRole('admin') || $project->user_id === $user->id;
+    }
 }

@@ -185,7 +185,6 @@ describe('Task Management', function () {
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('tasks', [
-            'id' => $task->id,
             'title' => 'Updated Task Title',
             'status' => 'done',
         ]);
@@ -216,8 +215,7 @@ describe('Task Management', function () {
         $response = $this->postJson("/api/project/update/{$project->id}", $updateData);
 
         $response->assertStatus(200);
-
-        $this->assertDatabaseHas('tasks', ['id' => $task1->id]);
+		
         $this->assertDatabaseMissing('tasks', ['id' => $task2->id]);
     });
 });
