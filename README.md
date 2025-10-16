@@ -1,61 +1,238 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Project Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based project management application with task tracking, user authentication, and progress monitoring.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **User Authentication**: Secure login/registration with Laravel Breeze & Sanctum
+- **Project Management**: Create, update, and delete projects
+- **Task Management**: Add, update, and delete tasks within projects
+- **Progress Tracking**: Visual progress bars showing task completion
+- **Authorization**: Users can only access their own projects
+- **API Endpoints**: RESTful API for frontend integration
+- **Testing**: included Pest test suite
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12
+- **Authentication**: Laravel Breeze + Sanctum
+- **Frontend**: Blade templates with Alpine.js
+- **Styling**: Tailwind CSS
+- **Testing**: Pest PHP
+- **Database**: MySQL
 
-## Learning Laravel
+## Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.2+
+- Composer
+- Node.js & NPM
+- MySQL
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd SD-projects
+   ```
 
-## Laravel Sponsors
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
 
-### Premium Partners
+4. **Environment setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. **Configure database**
+   Update your `.env` file with your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
+
+## Database Setup
+
+1. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
+
+2. **Seed the database**
+   ```bash
+   php artisan db:seed
+   ```
+
+## Running the Application
+
+1. **Start the Laravel development server**
+   ```bash
+   php artisan serve
+   ```
+   The application will be available at `http://localhost:8000`
+
+2. **Build frontend assets (if needed)**
+   ```bash
+   npm run dev
+   # or for production
+   npm run build
+   ```
+
+## Default Credentials
+
+After seeding the database, you can log in with these credentials:
+
+### Admin User
+- **Email**: `admin@example.com`
+- **Password**: `password`
+
+### Regular User
+- **Email**: `user@example.com`
+- **Password**: `password`
+
+## API Endpoints
+
+### Authentication Required
+All API endpoints require Sanctum authentication.
+
+#### Projects
+- `POST /api/project` - Create a new project
+- `POST /api/project/update/{project}` - Update a project
+- `POST /api/project/delete/{project}` - Delete a project
+
+#### Example API Usage
+```javascript
+// Get CSRF cookie first
+await axios.get('/sanctum/csrf-cookie');
+
+// Create project
+const response = await axios.post('/api/project', {
+    title: 'My Project',
+    description: 'Project description',
+    deadline: '2024-12-31',
+    tasks: [
+        {
+            title: 'Task 1',
+            status: 'todo',
+            due_date: '2024-12-15'
+        }
+    ]
+});
+```
+
+## Testing
+
+Run the comprehensive test suite:
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test file
+php artisan test tests/Feature/ProjectManagementTest.php
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Test Coverage
+- ✅ Project creation and validation
+- ✅ Task management (create, update, delete)
+- ✅ Authentication protection
+- ✅ Authorization (users can only access their own projects)
+- ✅ API endpoint testing
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/Api/     # API controllers
+├── Models/                   # Eloquent models
+├── Policies/                 # Authorization policies
+└── Requests/                 # Form request validation
+
+database/
+├── factories/               # Model factories for testing
+├── migrations/             # Database migrations
+└── seeders/               # Database seeders
+
+tests/
+└── Feature/               # Feature tests with Pest
+```
+
+## Key Features Implementation
+
+### Progress Tracking
+- Visual progress bars showing task completion percentage
+- Real-time updates when task status changes
+- Task counters (e.g., "3 of 5 tasks completed")
+
+### Authorization
+- Users can only view/edit their own projects
+- Policy-based authorization for delete operations
+- Sanctum middleware for API protection
+
+### Task Management
+- Create tasks with title, status, and due date
+- Update existing tasks
+- Delete tasks from projects
+- Status options: todo, in_progress, done
+
+## Development
+
+### Adding New Features
+1. Create migration: `php artisan make:migration create_feature_table`
+2. Create model: `php artisan make:model Feature -m`
+3. Create factory: `php artisan make:factory FeatureFactory --model=Feature`
+4. Add tests: `php artisan make:test FeatureTest`
+5. Update policies if needed
+
+### Code Style
+- Follow PSR-12 coding standards
+- Use meaningful variable and method names
+- Add comprehensive tests for new features
+- Document API endpoints
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Permission denied errors**
+   ```bash
+   sudo chown -R $USER:$USER storage bootstrap/cache
+   chmod -R 775 storage bootstrap/cache
+   ```
+
+2. **Database connection issues**
+   - Check your `.env` database configuration
+   - Ensure database server is running
+   - Verify database exists
+
+3. **Authentication issues**
+   - Clear application cache: `php artisan cache:clear`
+   - Clear config cache: `php artisan config:clear`
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Commit changes: `git commit -am 'Add new feature'`
+4. Push to branch: `git push origin feature/new-feature`
+5. Submit a pull request
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
