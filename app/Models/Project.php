@@ -18,11 +18,19 @@ class Project extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);        
+        return $this->belongsTo(User::class);
     }
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);        
-    } 
+        return $this->hasMany(Task::class);
+    }
+
+    public function scopeVisibleTo($query, User $user)
+    {
+        if (!$user->hasRole('admin')) {
+            $query->where('user_id', $user->id);
+        }
+        return $query;
+    }
 }
