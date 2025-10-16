@@ -279,6 +279,103 @@ describe('Authentication Protection', function () {
     });
 });
 
+describe('Project Assignment', function () {
+    it('allows admin users to assign projects to other users', function () {
+        // Create admin role first
+        $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin'], ['display_name' => 'Administrator']);
+        
+        // Create admin user with role
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+        $this->actingAs($admin, 'sanctum');
+
+        // Create target user and project
+        $targetUser = User::factory()->create();
+        $project = Project::factory()->create(['user_id' => $admin->id]);
+
+        $response = $this->postJson("/api/project/assign/{$project->id}", [
+            'user_id' => $targetUser->id,
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Project assigned successfully.',
+            ])
+            ->assertJsonStructure([
+                'message',
+                'project' => [
+                    'id',
+                    'user_id',
+                    'user' => ['id', 'name', 'email'],
+                ]
+            ]);
+
+        $this->assertDatabaseHas('projects', [
+            'id' => $project->id,
+            'user_id' => $targetUser->id,
+        ]);
+    });
+
+    it('prevents non-admin users from assigning projects', function () {
+        $userRole = \App\Models\Role::firstOrCreate(['name' => 'user'], ['display_name' => 'User']);
+        
+        $user = User::factory()->create(['role_id' => $userRole->id]);
+        $this->actingAs($user, 'sanctum');
+
+        $targetUser = User::factory()->create();
+        $project = Project::factory()->create(['user_id' => $user->id]);
+
+        $response = $this->postJson("/api/project/assign/{$project->id}", [
+            'user_id' => $targetUser->id,
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('projects', [
+            'id' => $project->id,
+            'user_id' => $user->id,
+        ]);
+    });
+
+    it('validates required user_id for assignment', function () {
+        $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin'], ['display_name' => 'Administrator']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+        $this->actingAs($admin, 'sanctum');
+
+        $project = Project::factory()->create(['user_id' => $admin->id]);
+
+        $response = $this->postJson("/api/project/assign/{$project->id}", []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['user_id']);
+    });
+
+    it('validates user_id exists in database', function () {
+        $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin'], ['display_name' => 'Administrator']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+        $this->actingAs($admin, 'sanctum');
+
+        $project = Project::factory()->create(['user_id' => $admin->id]);
+
+        $response = $this->postJson("/api/project/assign/{$project->id}", [
+            'user_id' => 99999, // Non-existent user ID
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['user_id']);
+    });
+
+    it('prevents non-authenticated users from assigning projects', function () {
+        $project = Project::factory()->create();
+        $targetUser = User::factory()->create();
+
+        $response = $this->postJson("/api/project/assign/{$project->id}", [
+            'user_id' => $targetUser->id,
+        ]);
+
+        $response->assertStatus(401);
+    });
+});
+
 describe('Project Deletion', function () {
     it('allows authenticated users to delete their own projects', function () {
         $user = User::factory()->create();

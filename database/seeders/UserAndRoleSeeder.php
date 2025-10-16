@@ -41,6 +41,15 @@ class UserAndRoleSeeder extends Seeder
             ]
         );
 
+        $user = User::firstOrCreate(
+            ['email' => 'normal1@example.com'],
+            [
+                'name' => 'first User',
+                'password' => Hash::make('password'),
+                'role_id' => $userRole->id,
+            ]
+        );
+
         $this->command->info('✅ Roles and Users seeded successfully.');
     }
 }

@@ -190,15 +190,7 @@ tests/
 - Update existing tasks
 - Delete tasks from projects
 - Status options: todo, in_progress, done
-
-## Development
-
-### Adding New Features
-1. Create migration: `php artisan make:migration create_feature_table`
-2. Create model: `php artisan make:model Feature -m`
-3. Create factory: `php artisan make:factory FeatureFactory --model=Feature`
-4. Add tests: `php artisan make:test FeatureTest`
-5. Update policies if needed
+- Assign Project to other user
 
 ### Code Style
 - Follow PSR-12 coding standards
