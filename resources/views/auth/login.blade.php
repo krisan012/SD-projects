@@ -16,17 +16,19 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+        <form x-data="loginForm()" @submit.prevent="login">
             @csrf
 
             <div>
                 <label for="email" class="block text-sm">Email</label>
-                <input id="email" name="email" type="email" required autofocus value="{{ old('email') }}" class="w-full border p-2 rounded" />
+                <input x-model="email" id="email" name="email" type="email" required autofocus value="{{ old('email') }}"
+                    class="w-full border p-2 rounded" />
             </div>
 
             <div>
                 <label for="password" class="block text-sm">Password</label>
-                <input id="password" name="password" type="password" required class="w-full border p-2 rounded" />
+                <input x-model="password" id="password" name="password" type="password" required
+                    class="w-full border p-2 rounded" />
             </div>
 
             <div class="flex items-center justify-between">
@@ -36,9 +38,43 @@
                 </label>
             </div>
 
+            <p x-text="message" class="text-red-600"></p>
+
             <button type="submit" class="w-full p-2 rounded bg-black text-white">Sign in</button>
         </form>
     </main>
 @endsection
 
+@section('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('loginForm', () => ({
+                email: '',
+                password: '',
+                remember: false,
+                loading: false,
+                message: '',
+                async login() {
+                    try {
+                        const response = await axios.post('/login', {
+                            email: this.email,
+                            password: this.password,
+                        });
 
+                        this.message = 'Login successful! Redirecting...';
+                        console.log(response.data);
+                    } catch (error) {
+                        if (error.response) {
+                            this.message = error.response.data.message || 'Login failed';
+                            console.error(error.response.data);
+                        } else {
+                            this.message = 'Network error';
+                        }
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }));
+        });
+    </script>
+@endsection
