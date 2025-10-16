@@ -31,11 +31,13 @@
                     class="w-full border p-2 rounded" />
             </div>
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between py-2">
                 <label class="text-sm flex items-center gap-2">
                     <input type="checkbox" name="remember" />
                     <span>Remember me</span>
                 </label>
+                
+                <a href="register">register</a>
             </div>
 
             <p x-text="message" class="text-red-600"></p>
@@ -62,7 +64,7 @@
                         });
 
                         this.message = 'Login successful! Redirecting...';
-                        console.log(response.data);
+                        window.location.href = '/'
                     } catch (error) {
                         if (error.response) {
                             this.message = error.response.data.message || 'Login failed';

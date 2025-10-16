@@ -16,11 +16,20 @@
 					<div class="flex justify-between h-16">
 						<div class="flex items-center">
 							<a href="/" class="flex items-center space-x-2">
-								logo<span class="font-semibold text-lg text-gray-800">{{ config('app.name', 'Laravel') }}</span>
+								<span class="font-semibold text-lg text-gray-800">{{ config('app.name', 'logo') }}</span>
 							</a>
 						</div>
 						<div class="flex items-center space-x-4">
-							<a href="{{ route('login.form') }}" class="text-sm text-gray-700 hover:text-blue-600">Login</a>
+							@auth
+								<form action="{{ route('logout') }}" method="POST">
+									@csrf
+									<button type="submit" class="font-semibold text-sm text-gray-700 hover:text-blue-600">logout</a>
+								</form>
+								
+							@endauth
+							@guest
+								<a href="{{ route('login.form') }}" class="font-semibold text-sm text-gray-700 hover:text-blue-600">Login</a>
+							@endguest
 						</div>
 					</div>
 				</div>
